@@ -16,7 +16,7 @@ Resources:
     Type: 'AWS::S3::Bucket'
     DeletionPolicy: Retain
     Properties:
-      BucketName: faridnsh-test-sam
+      BucketName: faridnsh-test-sam-2
   Function:
     Connectors:
       WriteAccessConn:

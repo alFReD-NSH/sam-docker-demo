@@ -12,7 +12,7 @@ print('1')
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
 
 def lambda_handler(event, context):
-    driver = webdriver.Chromium()
+    driver = webdriver.Chrome()
     driver.get("http://www.python.org")
     assert "Python" in driver.title
     elem = driver.find_element(By.NAME, "q")
