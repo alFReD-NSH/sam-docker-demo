@@ -1,0 +1,48 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  python3.9
+
+  Sample SAM Template for sam-app
+
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 180
+    MemorySize: 1024
+
+Resources:
+  Bucket:
+    Type: 'AWS::S3::Bucket'
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: farid-test-sam
+  Function:
+    Connectors:
+      WriteAccessConn:
+        Properties:
+          Destination:
+            - Id: Bucket
+          Permissions:
+            - Write
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      PackageType: Image
+      Architectures:
+        - x86_64
+      Environment:
+        S3_BUCKET_NAME: !Ref Bucket
+      Metadata:
+        Dockerfile: Dockerfile
+        DockerContext: ./hello_world
+        DockerTag: python3.9-v1
+      Events:
+        MyScheduleEvent:
+          Type: ScheduleV2
+          Properties:
+            ScheduleExpression: "rate(1 day)"
+
+Outputs:
+  HelloWorldFunction:
+    Description: "Hello World Lambda Function ARN"
+    Value: !GetAtt Function.FunctionArn
