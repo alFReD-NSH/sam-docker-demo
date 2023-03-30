@@ -32,15 +32,15 @@ Resources:
         - x86_64
       Environment:
         S3_BUCKET_NAME: !Ref Bucket
-      Metadata:
-        Dockerfile: Dockerfile
-        DockerContext: ./hello_world
-        DockerTag: python3.9-v1
-      Events:
-        MyScheduleEvent:
-          Type: ScheduleV2
-          Properties:
-            ScheduleExpression: "rate(1 day)"
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: ./hello_world
+      DockerTag: python3.9-v1
+    Events:
+      MyScheduleEvent:
+        Type: ScheduleV2
+        Properties:
+          ScheduleExpression: "rate(1 day)"
 
 Outputs:
   HelloWorldFunction:

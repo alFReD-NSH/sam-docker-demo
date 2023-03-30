@@ -4,6 +4,8 @@ import pandas
 import boto3
 import os
 
+print('1')
+
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
 
 def lambda_handler(event, context):
