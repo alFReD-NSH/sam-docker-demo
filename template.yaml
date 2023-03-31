@@ -42,8 +42,3 @@ Resources:
         Type: ScheduleV2
         Properties:
           ScheduleExpression: "rate(1 day)"
-
-Outputs:
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt Function.FunctionArn

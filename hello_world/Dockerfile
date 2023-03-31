@@ -1,7 +1,13 @@
 FROM public.ecr.aws/lambda/python:3.9 as build
+
+# Look it up here https://omahaproxy.appspot.com/
+ARG chrome_branch_base_position=1097615
+
+ARG chromedriver_version=111.0.5563.64
+
 RUN yum install -y unzip && \
-    curl -Lo "/tmp/chromedriver.zip" "https://chromedriver.storage.googleapis.com/111.0.5563.64/chromedriver_linux64.zip" && \
-    curl -Lo "/tmp/chrome-linux.zip" "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F1097615%2Fchrome-linux.zip?alt=media" && \
+    curl -Lo "/tmp/chromedriver.zip" "https://chromedriver.storage.googleapis.com/$chromedriver_version/chromedriver_linux64.zip" && \
+    curl -Lo "/tmp/chrome-linux.zip" "https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F$chrome_branch_base_position%2Fchrome-linux.zip?alt=media" && \
     unzip /tmp/chromedriver.zip -d /opt/ && \
     unzip /tmp/chrome-linux.zip -d /opt/
 
@@ -13,9 +19,11 @@ RUN yum install atk cups-libs gtk3 libXcomposite alsa-lib \
 COPY --from=build /opt/chrome-linux /opt/chrome
 COPY --from=build /opt/chromedriver /opt/
 
-COPY app.py requirements.txt ./
+COPY requirements.txt .
 
-RUN python3.9 -m pip install -r requirements.txt -t .
+RUN pip install -r requirements.txt -t .
+
+COPY . .
 
 # Command can be overwritten by providing a different command in the template directly.
 CMD ["app.lambda_handler"]
